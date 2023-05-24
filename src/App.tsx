@@ -6,6 +6,7 @@ import List1 from './list1'
 import ImmerDemo from './ImmerDemo'
 import List2 from './List2'
 import UseRefDemo from './UseRefDemo'
+import UseMemoDemo from './UseMemoDemo'
 function App() {
   // 列表
 
@@ -27,6 +28,10 @@ function App() {
         .......................................................................................
       </div>
       <UseRefDemo></UseRefDemo>
+      <div>
+        ..................................................................................................
+      </div>
+      <UseMemoDemo></UseMemoDemo>
     </>
   )
 }
