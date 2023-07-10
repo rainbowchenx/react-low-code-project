@@ -17,6 +17,7 @@ const Register: FC = () => {
   }
   return (
     <div className={styles.container}>
+      {/* 注册头 */}
       <div>
         <Space>
           <Title level={2}>
@@ -25,6 +26,7 @@ const Register: FC = () => {
           <Title level={2}>注册</Title>
         </Space>
       </div>
+      {/* 注册具体信息填写，表单 */}
       <div>
         <Form labelCol={{ span: 6 }} wrapperCol={{ span: 16 }} onFinish={onFinish}>
           <Form.Item label="用户名" name="username">
