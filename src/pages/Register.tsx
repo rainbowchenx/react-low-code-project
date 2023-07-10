@@ -29,13 +29,43 @@ const Register: FC = () => {
       {/* 注册具体信息填写，表单 */}
       <div>
         <Form labelCol={{ span: 6 }} wrapperCol={{ span: 16 }} onFinish={onFinish}>
-          <Form.Item label="用户名" name="username">
+          <Form.Item
+            label="用户名"
+            name="username"
+            rules={[
+              { required: true, message: '请输入用户名' },
+              { min: 6, message: '用户名至少6位' },
+              { max: 12, message: '用户名最多12位' },
+              { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字或下划线组成' },
+              { type: 'string', whitespace: true, message: '用户名不能有空格' },
+            ]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="密码" name="password">
+          <Form.Item
+            label="密码"
+            name="password"
+            rules={[{ required: true, message: '请输入密码' }]}
+          >
             <Input.Password />
           </Form.Item>
-          <Form.Item label="确认密码" name="confirm">
+          {/* dependencies:表示依赖于某项，当该项发生变化时会触发下面的验证函数 */}
+          <Form.Item
+            label="确认密码"
+            name="confirm"
+            dependencies={['password']}
+            rules={[
+              { required: true, message: '请再次输入密码' },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve()
+                  }
+                  return Promise.reject(new Error('两次密码不一致'))
+                },
+              }),
+            ]}
+          >
             <Input.Password />
           </Form.Item>
           <Form.Item label="昵称" name="nickname">
