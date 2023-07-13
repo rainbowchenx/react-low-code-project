@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 // 获取所需组件
 import { Button, Typography } from 'antd'
@@ -14,6 +14,11 @@ const Home: FC = () => {
   function clickHandler() {
     nav('/login')
   }
+  useEffect(() => {
+    fetch('/api/test')
+      .then(res => res.json())
+      .then(res => console.log(res))
+  })
   return (
     // 此为cover
     <div className={styles.container}>
