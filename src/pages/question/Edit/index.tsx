@@ -1,15 +1,14 @@
-import React, { FC, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { getQuestionService } from '../../../services/question'
+import React, { FC } from 'react'
+import useLoadQuestionData from '../../../hooks/useLoadQuestionData'
+
 const Edit: FC = () => {
-  const { id = '' } = useParams()
-  useEffect(() => {
-    async function fn() {
-      const data = await getQuestionService(id)
-      // console.log('data', data)
-    }
-    fn()
-  }, [])
-  return <p>Edit</p>
+  // 获取单个问卷详情
+  const { loading, questionData } = useLoadQuestionData()
+  return (
+    <div>
+      <p>Edit</p>
+      {loading ? <p>loading...</p> : <p>{JSON.stringify(questionData)}</p>}
+    </div>
+  )
 }
 export default Edit

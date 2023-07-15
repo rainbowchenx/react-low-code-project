@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import styles from './ManageLayout.module.scss'
 import { Button, Space, Divider, message } from 'antd'
@@ -11,20 +11,30 @@ const ManageLayout: FC = () => {
   const nav = useNavigate()
   // 获取当前页面相关数据的hook
   const { pathname } = useLocation()
+  // 管理问卷的loading状态
+  const [loading, setLoading] = useState(false)
   // 创建问卷的点击事件
   async function handleCreateClick() {
+    setLoading(true)
     const data = await createQuestionService()
     const { id } = data || {}
     if (id) {
       nav(`/question/edit/${id}`)
       message.success('创建成功')
     }
+    setLoading(false)
   }
   return (
     <div className={styles.container}>
       <div className={styles.left}></div>
       <Space direction="vertical">
-        <Button type="primary" size="large" icon={<PlusOutlined />} onClick={handleCreateClick}>
+        <Button
+          type="primary"
+          size="large"
+          icon={<PlusOutlined />}
+          onClick={handleCreateClick}
+          disabled={loading}
+        >
           新建问卷
         </Button>
         <Divider></Divider>
