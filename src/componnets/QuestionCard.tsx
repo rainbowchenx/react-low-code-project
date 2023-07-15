@@ -53,7 +53,6 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
         <div className={styles.left}>
           {/* 是否发布的跳转逻辑 ,点击标题*/}
           <Link to={isPublished ? `/question/stat/${_id}` : `/question/edit/${_id}`}>
-            {title}
             <Space>
               {/* 是否标星的判断 */}
               {isStar && <StarOutlined style={{ color: 'red' }} />}
