@@ -35,11 +35,14 @@ module.exports = [
   {
     url: '/api/question',
     method: 'get',
-    response() {
+    response(ctx) {
+      const { url = '' } = ctx
+      const isDeleted = ctx.url.includes('isDeleted=true')
+      const isStar = ctx.url.includes('isStar=true')
       return {
         errno: 0,
         data: {
-          list: getQuestionList(),
+          list: getQuestionList({ isDeleted, isStar }),
           total: 100,
         },
       }
