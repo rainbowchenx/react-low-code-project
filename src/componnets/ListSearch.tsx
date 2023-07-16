@@ -24,9 +24,10 @@ const ListSearch: FC = () => {
   }, [SearchParams])
   //   搜索框的回调
   function handleSearch(value: string) {
+    // 跳转页面，增加url参数
     nav({
       pathname: pathname,
-      search: `?${LIST_SEARCH_PARAM_KEY}=${value}`,
+      search: `?${LIST_SEARCH_PARAM_KEY}=${value}`, //并没有携带page 和pagesize参数
     })
   }
   return (
