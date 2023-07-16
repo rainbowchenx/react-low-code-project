@@ -3,9 +3,11 @@ import axios, { ResDataType } from './ajax'
 // import type { ResDataType } from './ajax'
 // 定义问卷list的泛型
 type SearchOption = {
-  keyword: string
-  isStar: boolean
-  isDeleted: boolean
+  keyword: string // 搜索关键字
+  isStar: boolean // 是否是星标问卷
+  isDeleted: boolean // 是否是已删除问卷
+  page: number // 页码
+  pageSize: number // 页容量
 }
 // 获取单个问卷信息
 export async function getQuestionService(id: string): Promise<ResDataType> {

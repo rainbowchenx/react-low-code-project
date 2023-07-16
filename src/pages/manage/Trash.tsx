@@ -15,6 +15,8 @@ import { ExclamationCircleOutlined } from '@ant-design/icons'
 import ListSearch from '../../componnets/ListSearch'
 // 引入问卷搜索的hook
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
+// 引入分页组件
+import ListPage from '../../componnets/ListPage'
 
 const Trash: FC = () => {
   useTitle('小慕问卷 - 我的问卷')
@@ -103,7 +105,9 @@ const Trash: FC = () => {
         {/* 相关数据展示 tableelem表示jsx片段 */}
         {list.length > 0 && TableElem}
       </div>
-      <div className={styles.footer}>分页</div>
+      <div className={styles.footer}>
+        <ListPage total={total} />
+      </div>
     </>
   )
 }

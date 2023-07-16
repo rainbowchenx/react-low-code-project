@@ -39,10 +39,11 @@ module.exports = [
       const { url = '' } = ctx
       const isDeleted = ctx.url.includes('isDeleted=true')
       const isStar = ctx.url.includes('isStar=true')
+      const pageSize = parseInt(ctx.query.pageSize) || 10
       return {
         errno: 0,
         data: {
-          list: getQuestionList({ isDeleted, isStar }),
+          list: getQuestionList({ len: pageSize, isDeleted, isStar }),
           total: 100,
         },
       }
