@@ -14,8 +14,8 @@ import {
 } from '@ant-design/icons'
 // 导入样式文件
 import styles from './QuestionCard.module.scss'
-// 引入ajax请求函数
-import { updateQuestionService } from '../services/question'
+// 引入ajax请求函数,包括标星 复制 删除
+import { updateQuestionService, duplicateQuestionService } from '../services/question'
 import { useRequest } from 'ahooks'
 
 // 获取modal中的confirm部分
@@ -36,10 +36,21 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
   const nav = useNavigate()
   // 结构出相关参数
   const { _id, title, isPublished, createAt, isStar, answerCount } = props
-  // 确认复制的回调函数逻辑
-  function duplicate() {
-    message.success('执行复制')
-  }
+  // 复制的回调函数
+  const { loading: duplicateLoading, run: duplicate } = useRequest(
+    async () => {
+      const data = await duplicateQuestionService(_id)
+      return data
+    },
+    {
+      manual: true,
+      onSuccess(result: any) {
+        message.success('复制成功')
+        nav(`/question/edit/${result.id}`)
+      },
+    }
+  )
+
   // 删除的回调函数
   function del() {
     confirm({
@@ -131,7 +142,7 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
               cancelText="取消"
               onConfirm={duplicate}
             >
-              <Button type="text" icon={<CopyOutlined />} size="small">
+              <Button type="text" icon={<CopyOutlined />} size="small" disabled={duplicateLoading}>
                 复制
               </Button>
             </Popconfirm>

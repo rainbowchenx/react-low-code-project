@@ -2,7 +2,7 @@
  * @Author: rainbowchen 1664373735@qq.com
  * @Date: 2023-07-12 22:20:35
  * @LastEditors: rainbowchen 1664373735@qq.com
- * @LastEditTime: 2023-07-19 21:40:14
+ * @LastEditTime: 2023-07-19 23:30:14
  * @FilePath: \react-low-code-project\wenjuan-mock\mock\question.js
  * @Description:
  *
@@ -66,6 +66,19 @@ module.exports = [
     response() {
       return {
         errno: 0,
+      }
+    },
+  },
+  // 获取(查询)问卷列表
+  {
+    url: '/api/question/duplicate/:id',
+    method: 'post',
+    response() {
+      return {
+        errno: 0,
+        data: {
+          id: Random.id(),
+        },
       }
     },
   },
