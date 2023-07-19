@@ -1,3 +1,13 @@
+/*
+ * @Author: rainbowchen 1664373735@qq.com
+ * @Date: 2023-07-12 22:20:35
+ * @LastEditors: rainbowchen 1664373735@qq.com
+ * @LastEditTime: 2023-07-19 21:40:14
+ * @FilePath: \react-low-code-project\wenjuan-mock\mock\question.js
+ * @Description:
+ *
+ * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved.
+ */
 const Mock = require('mockjs')
 const getQuestionList = require('./data/getQuestionList')
 const Random = Mock.Random
@@ -46,6 +56,16 @@ module.exports = [
           list: getQuestionList({ len: pageSize, isDeleted, isStar }),
           total: 100,
         },
+      }
+    },
+  },
+  // 获取(查询)问卷列表
+  {
+    url: '/api/question/:id',
+    method: 'patch',
+    response() {
+      return {
+        errno: 0,
       }
     },
   },

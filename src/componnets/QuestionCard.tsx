@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 // 导入路由
 import { useNavigate, Link } from 'react-router-dom'
 // 导入antd组件
@@ -14,6 +14,9 @@ import {
 } from '@ant-design/icons'
 // 导入样式文件
 import styles from './QuestionCard.module.scss'
+// 引入ajax请求函数
+import { updateQuestionService } from '../services/question'
+import { useRequest } from 'ahooks'
 
 // 获取modal中的confirm部分
 const { confirm } = Modal
@@ -47,6 +50,21 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
       },
     })
   }
+  // 修改标星,发起请求，由request实现
+  const [isStarState, setIsStarState] = useState(isStar)
+  const { loading: changeStarLoading, run: changeStar } = useRequest(
+    async () => {
+      const data = await updateQuestionService(_id, { isStar: !isStarState })
+      return data
+    },
+    {
+      manual: true,
+      onSuccess() {
+        setIsStarState(!isStarState)
+        message.success('修改成功')
+      },
+    }
+  )
   return (
     <div className={styles.container}>
       <div className={styles.title}>
@@ -55,7 +73,7 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
           <Link to={isPublished ? `/question/stat/${_id}` : `/question/edit/${_id}`}>
             <Space>
               {/* 是否标星的判断 */}
-              {isStar && <StarOutlined style={{ color: 'red' }} />}
+              {isStarState && <StarOutlined style={{ color: 'red' }} />}
               {title}
             </Space>
           </Link>
@@ -98,8 +116,14 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
         {/* 是否标星 复制 删除 */}
         <div className={styles.right}>
           <Space>
-            <Button type="text" icon={<StarOutlined />} size="small">
-              {isStar ? '取消标星' : '标星'}
+            <Button
+              type="text"
+              icon={<StarOutlined />}
+              size="small"
+              onClick={changeStar}
+              disabled={changeStarLoading}
+            >
+              {isStarState ? '取消标星' : '标星'}
             </Button>
             <Popconfirm
               title="确定复制该问卷?"

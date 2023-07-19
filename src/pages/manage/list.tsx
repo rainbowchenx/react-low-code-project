@@ -2,9 +2,9 @@
  * @Author: rainbowchen 1664373735@qq.com
  * @Date: 2023-05-22 20:42:56
  * @LastEditors: rainbowchen 1664373735@qq.com
- * @LastEditTime: 2023-07-16 14:58:20
+ * @LastEditTime: 2023-07-16 16:14:48
  * @FilePath: \react-low-code-project\src\pages\manage\list.tsx
- * @Description:
+ * @Description:list页面的显示
  *
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved.
  */
