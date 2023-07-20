@@ -4,7 +4,7 @@ import styles from './Common.module.scss'
 // 引入标题hook
 import { useTitle, useRequest } from 'ahooks'
 // 引入antd的自定义组件
-import { Typography, Empty, Table, Tag, Button, Space, Modal, Spin } from 'antd'
+import { Typography, Empty, Table, Tag, Button, Space, Modal, Spin, message } from 'antd'
 // 结构出确认
 const { confirm } = Modal
 // 结构出标题
@@ -17,7 +17,7 @@ import ListSearch from '../../componnets/ListSearch'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
 // 引入分页组件
 import ListPage from '../../componnets/ListPage'
-import { updateQuestionService } from '../../services/question'
+import { updateQuestionService, deleteQuestionService } from '../../services/question'
 
 const Trash: FC = () => {
   useTitle('小慕问卷 - 我的问卷')
@@ -62,19 +62,36 @@ const Trash: FC = () => {
       manual: true,
       debounceWait: 500, //防抖
       onSuccess() {
-        alert('修改成功')
+        message.success('恢复成功')
         // 手动刷新列表
-        refresh()
+        refresh() // 手动重置，触发
+        setSelectedIds([])
       },
     }
   )
   // 删除的函数
+  const { run: deleteQuestion } = useRequest(
+    async () => {
+      const data = await deleteQuestionService(selectedIds)
+      return data
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success('删除成功')
+        // 手动刷新列表
+        refresh()
+        // 手动重置，触发
+        setSelectedIds([])
+      },
+    }
+  )
   function del() {
     confirm({
       title: '确认彻底删除问卷吗',
       icon: <ExclamationCircleOutlined />,
       content: '删除以后不可以找回',
-      onOk: () => alert(`删除${JSON.stringify(selectedIds)}成功`),
+      onOk: deleteQuestion,
     })
   }
   // 恢复 删除 和表格 多选框等的展示
