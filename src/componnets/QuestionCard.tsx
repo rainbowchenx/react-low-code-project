@@ -50,17 +50,6 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
       },
     }
   )
-
-  // 删除的回调函数
-  function del() {
-    confirm({
-      title: '确定删除该问卷吗?',
-      icon: <ExclamationCircleOutlined />,
-      onOk: () => {
-        message.success('执行删除')
-      },
-    })
-  }
   // 修改标星,发起请求，由request实现
   const [isStarState, setIsStarState] = useState(isStar)
   const { loading: changeStarLoading, run: changeStar } = useRequest(
@@ -76,6 +65,33 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
       },
     }
   )
+  // 删除的回调函数
+  const [isDeletedState, setIsDeletedState] = useState(false)
+  const { loading: deleteLoading, run: deleteQuestion } = useRequest(
+    async () => {
+      const data = await updateQuestionService(_id, { isDeleted: true })
+      return data
+    },
+    {
+      manual: true,
+      onSuccess() {
+        setIsDeletedState(true)
+        message.success('删除成功')
+      },
+    }
+  )
+  function del() {
+    confirm({
+      title: '确定删除该问卷吗?',
+      icon: <ExclamationCircleOutlined />,
+      onOk: deleteQuestion,
+    })
+  }
+  // 已经删除的问卷，就不要渲染了
+  if (isDeletedState) {
+    return null
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.title}>
@@ -146,7 +162,13 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
                 复制
               </Button>
             </Popconfirm>
-            <Button type="text" icon={<DeleteOutlined />} size="small" onClick={del}>
+            <Button
+              type="text"
+              icon={<DeleteOutlined />}
+              size="small"
+              onClick={del}
+              disabled={deleteLoading}
+            >
               删除
             </Button>
           </Space>

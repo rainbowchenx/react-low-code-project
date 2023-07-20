@@ -30,7 +30,7 @@ export async function getQuestionListService(
   const data = (await axios.get(url, { params: opt })) as ResDataType
   return data
 }
-// 更新单个问卷
+// 更新单个问卷(包含假删除，因为也只是更新一个属性而不是彻底删除)
 export async function updateQuestionService(
   id: string,
   opt: { [key: string]: any }
