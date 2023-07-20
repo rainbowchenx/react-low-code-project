@@ -2,7 +2,7 @@
  * @Author: rainbowchen 1664373735@qq.com
  * @Date: 2023-07-15 18:39:45
  * @LastEditors: rainbowchen 1664373735@qq.com
- * @LastEditTime: 2023-07-16 12:01:57
+ * @LastEditTime: 2023-07-20 08:34:28
  * @FilePath: \react-low-code-project\src\hooks\useLoadQuestionListData.ts
  * @Description:获取问卷列表的hook
  *
@@ -35,7 +35,9 @@ function useLoadQuestionListData(opt: Partial<OptionType> = {}) {
   const { isStar, isDeleted } = opt
   const [searchParams] = useSearchParams()
   //   useRequest的第一个参数是一个异步函数，第二个参数是一个配置对象,基于useeffect
-  const { data, loading, error } = useRequest(
+  //  useRequest的返回值是一个对象，包含data,loading,error,refresh
+  // data是异步函数的返回值，loading是异步函数是否在加载，error是异步函数的错误信息，refresh是刷新函数
+  const { data, loading, error, refresh } = useRequest(
     async () => {
       //  获取url中的参数
       const keyword = searchParams.get(LIST_SEARCH_PARAM_KEY) || ''
@@ -49,6 +51,6 @@ function useLoadQuestionListData(opt: Partial<OptionType> = {}) {
       refreshDeps: [searchParams],
     }
   )
-  return { data, error, loading }
+  return { data, error, loading, refresh }
 }
 export default useLoadQuestionListData

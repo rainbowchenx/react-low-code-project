@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react'
 // 导入样式文件
 import styles from './Common.module.scss'
 // 引入标题hook
-import { useTitle } from 'ahooks'
+import { useTitle, useRequest } from 'ahooks'
 // 引入antd的自定义组件
 import { Typography, Empty, Table, Tag, Button, Space, Modal, Spin } from 'antd'
 // 结构出确认
@@ -17,14 +17,14 @@ import ListSearch from '../../componnets/ListSearch'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
 // 引入分页组件
 import ListPage from '../../componnets/ListPage'
+import { updateQuestionService } from '../../services/question'
 
 const Trash: FC = () => {
   useTitle('小慕问卷 - 我的问卷')
 
-  const { data = {}, loading } = useLoadQuestionListData({ isDeleted: true })
+  const { data = {}, loading, refresh } = useLoadQuestionListData({ isDeleted: true })
   const { list = [], total = 0 } = data
-  // 记录选中的id
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
+
   // 创建显示表格
   const tableColumns = [
     {
@@ -47,13 +47,43 @@ const Trash: FC = () => {
       dataIndex: 'createAt',
     },
   ]
+
+  // 记录选中的id
+  const [selectedIds, setSelectedIds] = useState<string[]>([])
+  // 恢复
+  const { run: recover } = useRequest(
+    async () => {
+      // 遍历一个数组发起请求for await of执行异步函数
+      for await (const id of selectedIds) {
+        await updateQuestionService(id, { isDeleted: false })
+      }
+    },
+    {
+      manual: true,
+      debounceWait: 500, //防抖
+      onSuccess() {
+        alert('修改成功')
+        // 手动刷新列表
+        refresh()
+      },
+    }
+  )
+  // 删除的函数
+  function del() {
+    confirm({
+      title: '确认彻底删除问卷吗',
+      icon: <ExclamationCircleOutlined />,
+      content: '删除以后不可以找回',
+      onOk: () => alert(`删除${JSON.stringify(selectedIds)}成功`),
+    })
+  }
   // 恢复 删除 和表格 多选框等的展示
   // 将jsx定义为变量的方法
   const TableElem = (
     <>
       <div style={{ marginBottom: '16px' }}>
         <Space>
-          <Button type="primary" disabled={selectedIds.length === 0}>
+          <Button type="primary" disabled={selectedIds.length === 0} onClick={recover}>
             恢复
           </Button>
           <Button danger disabled={selectedIds.length === 0} onClick={del}>
@@ -75,15 +105,6 @@ const Trash: FC = () => {
       />
     </>
   )
-  // 删除的函数
-  function del() {
-    confirm({
-      title: '确认彻底删除问卷吗',
-      icon: <ExclamationCircleOutlined />,
-      content: '删除以后不可以找回',
-      onOk: () => alert(`删除${JSON.stringify(selectedIds)}成功`),
-    })
-  }
   return (
     <>
       <div className={styles.header}>
