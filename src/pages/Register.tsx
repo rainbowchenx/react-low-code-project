@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 //引入antd组件
-import { Typography, Space, Form, Input, Button } from 'antd'
+import { Typography, Space, Form, Input, Button, message } from 'antd'
 // 引入路由组件
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 // 引入antd图标
 import { UserAddOutlined } from '@ant-design/icons'
 // 解构出标题部分组件
@@ -11,9 +11,32 @@ const { Title } = Typography
 import styles from './Register.module.scss'
 // 引入路由路径常量
 import { LOGIN_PATHNAME } from '../router'
+// 引入注册的api
+import { registerUserService } from '../services/user'
+// 引入userequest，用于注册部分
+import { useRequest } from 'ahooks'
+
 const Register: FC = () => {
+  //  路由跳转
+  const nav = useNavigate()
+  // 注册请求
+  const { run } = useRequest(
+    async values => {
+      const { username, password, nickname } = values
+      await registerUserService(username, password, nickname)
+    },
+    {
+      manual: true,
+      onSuccess: () => {
+        message.success('注册成功')
+        // 注册成功后跳转到登录页面
+        nav(LOGIN_PATHNAME)
+      },
+    }
+  )
+  // 表单提交成功的回调函数,执行run函数发请求
   function onFinish(values: any) {
-    console.log('Success:', values)
+    run(values)
   }
   return (
     <div className={styles.container}>

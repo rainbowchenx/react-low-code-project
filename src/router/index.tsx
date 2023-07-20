@@ -1,3 +1,13 @@
+/*
+ * @Author: rainbowchen 1664373735@qq.com
+ * @Date: 2023-06-19 22:50:43
+ * @LastEditors: rainbowchen 1664373735@qq.com
+ * @LastEditTime: 2023-07-20 23:40:41
+ * @FilePath: \react-low-code-project\src\router\index.tsx
+ * @Description:
+ *
+ * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved.
+ */
 import React from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 
@@ -78,7 +88,7 @@ export default router
 
 // ------------------分割线-------------------
 // 常用的路由常量
-export const LOGIN_PATHNAME = './login'
-export const REGISTER_PATHNAME = './register'
-export const HOME_PATHNAME = './'
-export const MANAGE_INDEX_PATHNAME = './manage/list'
+export const LOGIN_PATHNAME = '/login'
+export const REGISTER_PATHNAME = '/register'
+export const HOME_PATHNAME = '/'
+export const MANAGE_INDEX_PATHNAME = '/manage/list'
