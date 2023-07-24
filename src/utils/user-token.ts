@@ -4,7 +4,7 @@
  * @LastEditors: rainbowchen 1664373735@qq.com
  * @LastEditTime: 2023-07-21 08:03:21
  * @FilePath: \react-low-code-project\src\utils\user-token.ts
- * @Description: export
+ * @Description: 设置用户token，获取用户token，删除用户token
  *
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved.
  */
