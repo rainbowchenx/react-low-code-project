@@ -4,7 +4,7 @@
  * @LastEditors: rainbowchen 1664373735@qq.com
  * @LastEditTime: 2023-07-25 08:51:19
  * @FilePath: \react-low-code-project\src\layouts\MainLayout.tsx
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description: 主要布局组件
  */
 import React, { FC } from 'react'
 import { Outlet } from 'react-router-dom'
@@ -15,10 +15,13 @@ import Logo from '../componnets/Logo'
 // 引入用户登录组件
 import UserInfo from '../componnets/UserInfo'
 import userLoadUserData from '../hooks/useLoadUserData'
+// 导入用于判断跳转逻辑的自定义hook
+import useNavPage from '../hooks/useNavPage'
 
 const { Header, Footer, Content } = Layout
 const MainLayout: FC = () => {
   const { waitingUserData } = userLoadUserData()
+  useNavPage(waitingUserData)
   return (
     <Layout>
       <Header className={styles.header}>

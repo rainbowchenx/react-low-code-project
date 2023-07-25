@@ -1,4 +1,4 @@
-//
+//通过ajax请求获取用户信息，并存储到redux store中
 import { useEffect, useState } from 'react'
 // 引入useRequest用于发请求相关
 import { useRequest } from 'ahooks'
@@ -23,7 +23,6 @@ function userLoadUserData() {
       setWaitingUserData(false)
     },
   })
-
   const { username } = useGetUserInfo()
   //   判断当前redux store中是否有username，如果有，说明已经获取到用户信息，设置waitingUserData为false
   useEffect(() => {
