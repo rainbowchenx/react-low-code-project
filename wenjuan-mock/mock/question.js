@@ -22,6 +22,34 @@ module.exports = [
         data: {
           id: Random.id(),
           title: Random.ctitle(10, 20),
+          // 初始化组件列表的mock数据
+          componentList: [
+            // 标题
+            {
+              id: Random.id(),
+              type: 'questionTitle',
+              title: '标题',
+              props: {
+                text: '个人信息调研',
+                level: 1,
+                isCenter: false,
+              },
+            },
+            // 输入
+            {
+              id: Random.id(),
+              type: 'questionInput',
+              title: '输入框',
+              props: { title: '你的名字', placeholder: '请输入你的姓名' },
+            },
+            // 输入
+            {
+              id: Random.id(),
+              type: 'questionInput',
+              title: '输入框',
+              props: { title: '你的电话', placeholder: '请输入你的电话' },
+            },
+          ],
         },
       }
     },

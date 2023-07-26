@@ -1,3 +1,4 @@
+// 创建slice，其中包含了reducer和action，payloadAction是redux-toolkit的一个类型
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 // 设置state的类型
 export type UserStateType = {
