@@ -4,7 +4,7 @@
  * @LastEditors: rainbowchen 1664373735@qq.com
  * @LastEditTime: 2023-07-24 23:05:05
  * @FilePath: \react-low-code-project\src\hooks\useGetUserInfo.ts
- * @Description: 获取用户信息的hook
+ * @Description: 从redux store中获取用户信息的hook
  */
 // 用于获取用户信息的hook
 import { useSelector } from 'react-redux'

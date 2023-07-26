@@ -1,18 +1,16 @@
-//通过ajax请求获取用户信息，并存储到redux store中
+//通过ajax请求(利用userequest来发请求)获取用户信息，并存储到redux store中
 import { useEffect, useState } from 'react'
-// 引入useRequest用于发请求相关
 import { useRequest } from 'ahooks'
+// 引入获取用户信息的service ajax请求
+import { getUserInfoService } from '../services/user'
+import { loginReducer } from '../store/userReducer'
 import { useDispatch } from 'react-redux'
 // 获取redux store中的username
 import useGetUserInfo from './useGetUserInfo'
-// 引入获取用户信息的service
-import { getUserInfoService } from '../services/user'
-import { loginReducer } from '../store/userReducer'
 function userLoadUserData() {
   const dispatch = useDispatch()
-  // 用于判断是否重新加载
+  // 用于判断用户是否已经获取到用户信息的状态管理
   const [waitingUserData, setWaitingUserData] = useState(true)
-  //   ajax请求加载用户信息
   const { run } = useRequest(getUserInfoService, {
     manual: true,
     onSuccess(result) {

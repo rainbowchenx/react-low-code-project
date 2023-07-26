@@ -14,12 +14,18 @@ import useNavPage from '../hooks/useNavPage'
 
 const QuestionLayout: FC = () => {
   const { waitingUserData } = userLoadUserData()
+  // 判断用户是否登录
   useNavPage(waitingUserData)
   return (
-    <>
-      <p>questionlayout </p>
-      <div>{waitingUserData ? <Spin /> : <Outlet />}</div>
-    </>
+    <div style={{ height: '100vh' }}>
+      {waitingUserData ? (
+        <div style={{ textAlign: 'center', marginTop: '20%' }}>
+          <Spin size="large" />
+        </div>
+      ) : (
+        <Outlet />
+      )}
+    </div>
   )
 }
 export default QuestionLayout
