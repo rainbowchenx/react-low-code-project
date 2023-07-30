@@ -15,9 +15,8 @@ const Home: FC = () => {
     nav('/login')
   }
   useEffect(() => {
-    fetch('/api/test')
-      .then(res => res.json())
-      .then(res => console.log(res))
+    fetch('/api/test').then(res => res.json())
+    // .then(res => console.log(res))
   })
   return (
     // 此为cover

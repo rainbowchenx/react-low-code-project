@@ -50,7 +50,7 @@ const Star: FC = () => {
         {list.length > 0 &&
           list.map((q: any) => {
             const { _id } = q
-            console.log(q)
+            // console.log(q)
             return <QuestionCard key={_id} {...q} />
           })}
       </div>
