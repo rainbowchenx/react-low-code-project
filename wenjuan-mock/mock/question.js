@@ -28,7 +28,7 @@ module.exports = [
             // 标题
             {
               fe_id: Random.id(),
-              type: 'questionTitle',
+              type: 'QuestionTitle',
               title: '标题',
               props: {
                 text: '个人信息调研',
@@ -39,14 +39,14 @@ module.exports = [
             // 输入框
             {
               fe_id: Random.id(),
-              type: 'questionInput', //组件类型是不能重复且唯一的
+              type: 'QuestionInput', //组件类型是不能重复且唯一的
               title: '输入框',
               props: { title: '你的名字', placeholder: '请输入你的姓名' },
             },
             // 输入
             {
               fe_id: Random.id(),
-              type: 'questionInput',
+              type: 'QuestionInput',
               title: '输入框',
               props: { title: '你的电话', placeholder: '请输入你的电话' },
             },

@@ -9,7 +9,7 @@ export type ComponentInfoType = {
   title: string //问卷的标题
   props: ComponentPropsType //问卷的属性，单独定义
 }
-// 组件列表的类型
+// 各个组件组成的组件列表的类型
 export type ComponentsStateType = {
   componentList: Array<ComponentInfoType>
 }
