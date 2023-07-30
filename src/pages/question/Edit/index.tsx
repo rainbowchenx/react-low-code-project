@@ -1,10 +1,11 @@
 import React, { FC } from 'react'
 import useLoadQuestionData from '../../../hooks/useLoadQuestionData'
 import styles from './index.module.scss'
+import EditCanvas from './EditCanvas'
 
 const Edit: FC = () => {
   // 获取单个问卷详情
-  const { loading, data } = useLoadQuestionData()
+  const { loading } = useLoadQuestionData()
   return (
     // 外层，包含上下两部分
     <div className={styles.container}>
@@ -18,7 +19,7 @@ const Edit: FC = () => {
           {/* 中间部分 */}
           <div className={styles.main}>
             <div className={styles['canvas-wrapper']}>
-              <div style={{ height: '900px' }}>画布 测试滚动</div>
+              <EditCanvas loading={loading} />
             </div>
           </div>
           {/* 右侧部分 */}

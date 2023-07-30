@@ -8,6 +8,6 @@ export * from './interface'
 export default {
   title: '输入框',
   type: 'QuestionInput', //问卷类型，和后端统一
-  Component,
+  Component, //画布显示得组件
   defaultProps: QuestionInputDefaultProps,
 }
