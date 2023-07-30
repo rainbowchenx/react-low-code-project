@@ -1,4 +1,4 @@
-//
+//定义各种类型 ts的接口
 export type QuestionInputPropsType = {
   title?: string
   placeholder?: string

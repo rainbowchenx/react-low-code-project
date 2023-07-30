@@ -4,6 +4,9 @@
 import React, { FC } from 'react'
 import styles from './EditCanvas.module.scss'
 import { Spin } from 'antd'
+// 导入获取组件李彪信息的hooks
+import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
+import { getComponentConfByType } from '../../../componnets/QuestionComponents/QuestionInput/Component'
 
 // 临时静态展示一下title input的效果
 import QuestionInput from '../../../componnets/QuestionComponents/QuestionInput/Component'
@@ -14,6 +17,7 @@ type PropsType = {
 }
 
 const EditCanvas: FC<PropsType> = ({ loading }) => {
+  const { componentList } = useGetComponentInfo()
   // loading加载中
   if (loading) {
     return (
@@ -24,18 +28,18 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
   }
   return (
     <div className={styles.canvas}>
-      <div className={styles['component-wrapper']}>
-        <div className={styles.component}>
-          {/* 问卷标题 */}
-          <QuestionTitle />
+      {/* <div className={styles['component-wrapper']}>
+        <div className={styles.component}> */}
+      {/* 问卷标题 */}
+      {/* <QuestionTitle />
         </div>
       </div>
       <div className={styles['component-wrapper']}>
-        <div className={styles.component}>
-          {/* 问卷输入框 */}
-          <QuestionInput />
+        <div className={styles.component}> */}
+      {/* 问卷输入框 */}
+      {/* <QuestionInput />
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

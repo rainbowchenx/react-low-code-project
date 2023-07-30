@@ -23,10 +23,11 @@ module.exports = [
           id: Random.id(),
           title: Random.ctitle(10, 20),
           // 初始化组件列表的mock数据
+          // 所有组件的列表
           componentList: [
             // 标题
             {
-              id: Random.id(),
+              fe_id: Random.id(),
               type: 'questionTitle',
               title: '标题',
               props: {
@@ -35,16 +36,16 @@ module.exports = [
                 isCenter: false,
               },
             },
-            // 输入
+            // 输入框
             {
-              id: Random.id(),
-              type: 'questionInput',
+              fe_id: Random.id(),
+              type: 'questionInput', //组件类型是不能重复且唯一的
               title: '输入框',
               props: { title: '你的名字', placeholder: '请输入你的姓名' },
             },
             // 输入
             {
-              id: Random.id(),
+              fe_id: Random.id(),
               type: 'questionInput',
               title: '输入框',
               props: { title: '你的电话', placeholder: '请输入你的电话' },
