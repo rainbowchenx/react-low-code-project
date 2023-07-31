@@ -43,7 +43,26 @@ export const componentsSlice = createSlice({
       }
       return state
     },
+    /**
+     * @description: 添加组件,有选中，即selectedid存在，则新组件插入到选中组件的后面，否则插入到最后
+     */
+    addComponent: produce(
+      (draft: ComponentsStateType, actions: PayloadAction<ComponentInfoType>) => {
+        const newComponent = actions.payload
+        const { selectedId, componentList } = draft
+        const index = componentList.findIndex(item => item.fe_id === selectedId)
+        if (index < 0) {
+          // 未选中任何组件
+          draft.componentList.push(newComponent)
+        } else {
+          // 选中了某个组件
+          draft.componentList.splice(index + 1, 0, newComponent)
+        }
+        // 新添加的组件为选中状态
+        draft.selectedId = newComponent.fe_id
+      }
+    ),
   },
 })
-export const { resetComponents, changeSelectedId } = componentsSlice.actions
+export const { resetComponents, changeSelectedId, addComponent } = componentsSlice.actions
 export default componentsSlice.reducer

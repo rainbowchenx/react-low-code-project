@@ -2,16 +2,32 @@
  * @description 左侧面板中的组件库部分
  */
 import React, { FC } from 'react'
+import { nanoid } from '@reduxjs/toolkit'
 import { Typography } from 'antd'
+import { useDispatch } from 'react-redux'
 import { componentConfGroup, ComponentConfType } from '../../../componnets/QuestionComponents'
+import { addComponent } from '../../../store/componentsReducer'
 import styles from './ComponentLib.module.scss'
 const Libs: FC = () => {
   const { Title } = Typography
+  const dispatch = useDispatch()
+
   // 生成用于显示组件的tsx片段
   function genComponent(c: ComponentConfType) {
-    const { title, Component, type } = c
+    const { title, Component, type, defaultProps } = c
+    // 点击左侧组件，添加组件到中间画布
+    function handleClick() {
+      dispatch(
+        addComponent({
+          fe_id: nanoid(),
+          type,
+          title,
+          props: defaultProps,
+        })
+      )
+    }
     return (
-      <div className={styles.wrapper}>
+      <div key={type} className={styles.wrapper} onClick={handleClick}>
         <div className={styles.components}>
           <Component />
         </div>
