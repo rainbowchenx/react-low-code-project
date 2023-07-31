@@ -8,9 +8,11 @@ import { useDispatch } from 'react-redux'
 // 获取redux store中的username
 import useGetUserInfo from './useGetUserInfo'
 function userLoadUserData() {
+  console.log('userLoadUserData触发了')
   const dispatch = useDispatch()
   // 用于判断用户是否已经获取到用户信息的状态管理
   const [waitingUserData, setWaitingUserData] = useState(true)
+  console.log(waitingUserData)
   const { run } = useRequest(getUserInfoService, {
     manual: true,
     onSuccess(result) {
@@ -23,12 +25,13 @@ function userLoadUserData() {
   })
   const { username } = useGetUserInfo()
   //   判断当前redux store中是否有username，如果有，说明已经获取到用户信息，设置waitingUserData为false
+  const loginName = username ? true : false
   useEffect(() => {
     if (username) {
       setWaitingUserData(false)
     }
     run()
-  }, [username])
+  }, [loginName])
 
   return { waitingUserData }
 }
