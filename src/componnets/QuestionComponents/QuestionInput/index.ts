@@ -4,6 +4,8 @@
  */
 import Component from './Component'
 import { QuestionInputDefaultProps } from './interface'
+// 导入右侧属性组件
+import PropComponent from './PropComponent'
 export * from './interface'
 // 导出组件相关信息或者说配置信息
 export default {
@@ -11,4 +13,5 @@ export default {
   type: 'QuestionInput', //问卷类型，和后端统一
   Component, //画布显示得组件
   defaultProps: QuestionInputDefaultProps,
+  PropComponent, //属性组件
 }

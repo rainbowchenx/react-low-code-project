@@ -46,6 +46,7 @@ export const componentsSlice = createSlice({
     /**
      * @description: 添加组件,有选中，即selectedid存在，则新组件插入到选中组件的后面，否则插入到最后
      */
+    // TODO:存在bug
     addComponent: produce(
       (draft: ComponentsStateType, actions: PayloadAction<ComponentInfoType>) => {
         const newComponent = actions.payload

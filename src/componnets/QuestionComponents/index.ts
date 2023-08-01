@@ -5,7 +5,7 @@ import type { FC } from 'react'
 import QuestionInputConf, { QuestionInputPropsType } from './QuestionInput'
 import QuestionTitleConf, { QuestionTitlePropsType } from './QuestionTitle'
 // 各个组件的type
-export type ComponentPropsType = QuestionInputPropsType | QuestionTitlePropsType
+export type ComponentPropsType = QuestionInputPropsType & QuestionTitlePropsType
 // 统一定义组件的配置
 export type ComponentConfType = {
   title: string

@@ -1,9 +1,17 @@
-//
+/**
+ * @description：不同级别的标题类型设置
+ */
 export type QuestionTitlePropsType = {
-  title?: string
-  placeholder?: string
+  text?: string
+  level?: 1 | 2 | 3 | 4 | 5
+  isCenter?: boolean
+
+  onChange?: (newProps: QuestionTitlePropsType) => void
+  disabled?: boolean
 }
+
 export const QuestionTitleDefaultProps: QuestionTitlePropsType = {
-  title: '输入框标题',
-  placeholder: '请输入...',
+  text: '一行标题',
+  level: 1,
+  isCenter: false,
 }
