@@ -5,7 +5,7 @@ import { produce } from 'immer'
 import { ComponentPropsType } from '../../componnets/QuestionComponents'
 // 定义组件信息的类型,类型参照后端返回的数据类型,单个组件的信息
 export type ComponentInfoType = {
-  fe_id: string //TODO
+  fe_id: string //id标识
   type: string //问卷的类型
   title: string //问卷的标题
   props: ComponentPropsType //问卷的属性，单独定义
@@ -46,23 +46,50 @@ export const componentsSlice = createSlice({
     /**
      * @description: 添加组件,有选中，即selectedid存在，则新组件插入到选中组件的后面，否则插入到最后
      */
-    // TODO:存在bug
-    addComponent: produce(
-      (draft: ComponentsStateType, actions: PayloadAction<ComponentInfoType>) => {
-        const newComponent = actions.payload
-        const { selectedId, componentList } = draft
-        const index = componentList.findIndex(item => item.fe_id === selectedId)
-        if (index < 0) {
-          // 未选中任何组件
-          draft.componentList.push(newComponent)
-        } else {
-          // 选中了某个组件
-          draft.componentList.splice(index + 1, 0, newComponent)
+    // addComponent: produce(
+    //   (draft: ComponentsStateType, actions: PayloadAction<ComponentInfoType>) => {
+    //     const newComponent = actions.payload
+    //     const { selectedId, componentList } = draft
+    //     const index = componentList.findIndex(item => item.fe_id === selectedId)
+    //     if (index < 0) {
+    //       // 未选中任何组件
+    //       draft.componentList.push(newComponent)
+    //     } else {
+    //       // 选中了某个组件
+    //       draft.componentList.splice(index + 1, 0, newComponent)
+    //     }
+    //     // 新添加的组件为选中状态
+    //     draft.selectedId = newComponent.fe_id
+    //   }
+    // ),
+    addComponent: (state: ComponentsStateType, actions: PayloadAction<ComponentInfoType>) => {
+      const newComponent = actions.payload
+      const { selectedId, componentList } = state
+      const index = componentList.findIndex(item => item.fe_id === selectedId)
+      if (index < 0) {
+        // 未选中任何组件
+        state = {
+          ...state,
+          componentList: [...componentList, newComponent],
         }
-        // 新添加的组件为选中状态
-        draft.selectedId = newComponent.fe_id
+      } else {
+        // 选中某个组件
+        state = {
+          ...state,
+          componentList: [
+            ...componentList.slice(0, index + 1),
+            newComponent,
+            ...componentList.slice(index + 1),
+          ],
+        }
       }
-    ),
+      // 新添加的组件为选中状态
+      state = {
+        ...state,
+        selectedId: newComponent.fe_id,
+      }
+      return state
+    },
   },
 })
 export const { resetComponents, changeSelectedId, addComponent } = componentsSlice.actions
