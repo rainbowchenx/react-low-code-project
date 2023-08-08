@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { changeSelectedId } from '../../../store/componentsReducer'
 import LeftPanel from './LeftPanel'
 import RightPanel from './RightPanel'
+import EditHeader from './EditHeader'
 
 const Edit: FC = () => {
   // 获取单个问卷详情
@@ -18,7 +19,9 @@ const Edit: FC = () => {
     // 外层，包含上下两部分
     <div className={styles.container}>
       {/* 头部部分 */}
-      <div style={{ backgroundColor: '#fff', height: '40px' }}>Header</div>
+      <div style={{ backgroundColor: '#fff', height: '40px' }}>
+        <EditHeader />
+      </div>
       {/* 主要部分 */}
       <div className={styles['content-wrapper']}>
         <div className={styles.content}>

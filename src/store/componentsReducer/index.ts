@@ -92,8 +92,28 @@ export const componentsSlice = createSlice({
         ],
       }
     },
+    // 删除选中(selectedId)的组件
+    removeSelectedComponent: (state: ComponentsStateType) => {
+      const { componentList = [], selectedId: removeId } = state
+      const index = componentList.findIndex(item => item.fe_id === removeId)
+      // 重新计算selectedid
+
+      if (index < 0) {
+        return state
+      }
+      state = {
+        ...state,
+        componentList: [...componentList.slice(0, index), ...componentList.slice(index + 1)],
+      }
+      return state
+    },
   },
 })
-export const { resetComponents, changeSelectedId, addComponent, changeComponentProps } =
-  componentsSlice.actions
+export const {
+  resetComponents,
+  changeSelectedId,
+  addComponent,
+  changeComponentProps,
+  removeSelectedComponent,
+} = componentsSlice.actions
 export default componentsSlice.reducer
