@@ -1,3 +1,6 @@
+/**
+ * @description 列表页的分页组件
+ */
 import React, { FC, useEffect, useState } from 'react'
 import { Pagination } from 'antd'
 import { LIST_PAGE_SIZE, LIST_PAGE_PARAM_KEY, LIST_PAGE_SIZE_PARAM_KEY } from '../constant'

@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { produce } from 'immer'
 // 引入组件的属性类型
 import { ComponentPropsType } from '../../componnets/QuestionComponents'
+import { stat } from 'fs'
 // 定义组件信息的类型,类型参照后端返回的数据类型,单个组件的信息
 export type ComponentInfoType = {
   fe_id: string //id标识
@@ -29,13 +30,6 @@ export const componentsSlice = createSlice({
     resetComponents: (state: ComponentsStateType, actions: PayloadAction<ComponentsStateType>) => {
       return actions.payload
     },
-    // 使用immer改变react state不可变数据的写法
-    // 修改selectedId,通常是禁止直接进行修改的，所以使用immer中的produce进行修改
-    // changeSelectedId: produce((draft: ComponentsStateType, actions: PayloadAction<string>) => {
-    //   console.log('actions.payload2', actions.payload)
-    //   console.log('draft', draft)
-    //   draft.selectedId = actions.payload
-    // }),
     changeSelectedId: (state: ComponentsStateType, actions: PayloadAction<string>) => {
       state = {
         ...state,
@@ -46,22 +40,6 @@ export const componentsSlice = createSlice({
     /**
      * @description: 添加组件,有选中，即selectedid存在，则新组件插入到选中组件的后面，否则插入到最后
      */
-    // addComponent: produce(
-    //   (draft: ComponentsStateType, actions: PayloadAction<ComponentInfoType>) => {
-    //     const newComponent = actions.payload
-    //     const { selectedId, componentList } = draft
-    //     const index = componentList.findIndex(item => item.fe_id === selectedId)
-    //     if (index < 0) {
-    //       // 未选中任何组件
-    //       draft.componentList.push(newComponent)
-    //     } else {
-    //       // 选中了某个组件
-    //       draft.componentList.splice(index + 1, 0, newComponent)
-    //     }
-    //     // 新添加的组件为选中状态
-    //     draft.selectedId = newComponent.fe_id
-    //   }
-    // ),
     addComponent: (state: ComponentsStateType, actions: PayloadAction<ComponentInfoType>) => {
       const newComponent = actions.payload
       const { selectedId, componentList } = state
@@ -90,7 +68,32 @@ export const componentsSlice = createSlice({
       }
       return state
     },
+    // 修改组件属性
+    changeComponentProps: (
+      state: ComponentsStateType,
+      actions: PayloadAction<{ fe_id: string; newProps: ComponentPropsType }>
+    ) => {
+      console.log('changeComponentProps', actions.payload)
+      const { fe_id, newProps } = actions.payload
+      const { componentList } = state
+      const index = componentList.findIndex(item => item.fe_id === fe_id)
+      if (index < 0) {
+        return state
+      }
+      state = {
+        ...state,
+        componentList: [
+          ...componentList.slice(0, index),
+          {
+            ...componentList[index],
+            props: newProps,
+          },
+          ...componentList.slice(index + 1),
+        ],
+      }
+    },
   },
 })
-export const { resetComponents, changeSelectedId, addComponent } = componentsSlice.actions
+export const { resetComponents, changeSelectedId, addComponent, changeComponentProps } =
+  componentsSlice.actions
 export default componentsSlice.reducer
