@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { produce } from 'immer'
 // 引入组件的属性类型
 import { ComponentPropsType } from '../../componnets/QuestionComponents'
-import { stat } from 'fs'
+import getNextSelectedId from './utils'
 // 定义组件信息的类型,类型参照后端返回的数据类型,单个组件的信息
 export type ComponentInfoType = {
   fe_id: string //id标识
@@ -97,12 +97,13 @@ export const componentsSlice = createSlice({
       const { componentList = [], selectedId: removeId } = state
       const index = componentList.findIndex(item => item.fe_id === removeId)
       // 重新计算selectedid
-
+      const newSelectedId = getNextSelectedId(removeId, componentList)
       if (index < 0) {
         return state
       }
       state = {
         ...state,
+        selectedId: newSelectedId,
         componentList: [...componentList.slice(0, index), ...componentList.slice(index + 1)],
       }
       return state
