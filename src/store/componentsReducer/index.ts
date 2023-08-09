@@ -1,14 +1,15 @@
 // 存储组件列表数据
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { produce } from 'immer'
+import produce from 'immer'
 // 引入组件的属性类型
 import { ComponentPropsType } from '../../componnets/QuestionComponents'
-import getNextSelectedId from './utils'
+import { getNextSelectedId } from './utils'
 // 定义组件信息的类型,类型参照后端返回的数据类型,单个组件的信息
 export type ComponentInfoType = {
   fe_id: string //id标识
   type: string //问卷的类型
   title: string //问卷的标题
+  isHidden?: boolean //是否隐藏
   props: ComponentPropsType //问卷的属性，单独定义
 }
 // 各个组件组成的组件列表的类型
@@ -27,21 +28,21 @@ export const componentsSlice = createSlice({
   initialState: INIT_STATE,
   reducers: {
     // 重置所有组件
-    resetComponents: (state: ComponentsStateType, actions: PayloadAction<ComponentsStateType>) => {
-      return actions.payload
+    resetComponents: (state: ComponentsStateType, action: PayloadAction<ComponentsStateType>) => {
+      return action.payload
     },
-    changeSelectedId: (state: ComponentsStateType, actions: PayloadAction<string>) => {
+    changeSelectedId: (state: ComponentsStateType, action: PayloadAction<string>) => {
       state = {
         ...state,
-        selectedId: actions.payload,
+        selectedId: action.payload,
       }
       return state
     },
     /**
      * @description: 添加组件,有选中，即selectedid存在，则新组件插入到选中组件的后面，否则插入到最后
      */
-    addComponent: (state: ComponentsStateType, actions: PayloadAction<ComponentInfoType>) => {
-      const newComponent = actions.payload
+    addComponent: (state: ComponentsStateType, action: PayloadAction<ComponentInfoType>) => {
+      const newComponent = action.payload
       const { selectedId, componentList } = state
       const index = componentList.findIndex(item => item.fe_id === selectedId)
       if (index < 0) {
@@ -71,16 +72,16 @@ export const componentsSlice = createSlice({
     // 修改组件属性
     changeComponentProps: (
       state: ComponentsStateType,
-      actions: PayloadAction<{ fe_id: string; newProps: ComponentPropsType }>
+      action: PayloadAction<{ fe_id: string; newProps: ComponentPropsType }>
     ) => {
-      console.log('changeComponentProps', actions.payload)
-      const { fe_id, newProps } = actions.payload
+      console.log('changeComponentProps', action.payload)
+      const { fe_id, newProps } = action.payload
       const { componentList } = state
       const index = componentList.findIndex(item => item.fe_id === fe_id)
       if (index < 0) {
         return state
       }
-      state = {
+      return {
         ...state,
         componentList: [
           ...componentList.slice(0, index),
@@ -95,19 +96,75 @@ export const componentsSlice = createSlice({
     // 删除选中(selectedId)的组件
     removeSelectedComponent: (state: ComponentsStateType) => {
       const { componentList = [], selectedId: removeId } = state
+      console.log('removeSelectedComponent 执行了', state)
       const index = componentList.findIndex(item => item.fe_id === removeId)
       // 重新计算selectedid
-      const newSelectedId = getNextSelectedId(removeId, componentList)
+      const newSelectedId = getNextSelectedId(componentList, removeId)
       if (index < 0) {
         return state
       }
-      state = {
+      return {
         ...state,
         selectedId: newSelectedId,
         componentList: [...componentList.slice(0, index), ...componentList.slice(index + 1)],
       }
-      return state
     },
+    // 隐藏和显示组件，组件中isHidden属性
+    changeComponentHidden: (
+      state: ComponentsStateType,
+      action: PayloadAction<{ fe_id: string; isHidden: boolean }>
+    ) => {
+      const { fe_id, isHidden } = action.payload
+      const { componentList } = state
+      const index = componentList.findIndex(item => item.fe_id === fe_id)
+      // 重新计算selectedid
+      let newSelectedId = ''
+      if (isHidden) {
+        // 隐藏组件
+        newSelectedId = getNextSelectedId(componentList, fe_id)
+      } else {
+        // 显示组件
+        newSelectedId = fe_id
+      }
+      if (index < 0) {
+        return state
+      }
+      console.log('新的index', state)
+      return {
+        ...state,
+        selectedId: newSelectedId,
+        componentList: [
+          ...componentList.slice(0, index),
+          {
+            ...componentList[index],
+            isHidden,
+          },
+          ...componentList.slice(index + 1),
+        ],
+      }
+    },
+    // changeComponentHidden: produce(
+    //   (draft: ComponentsStateType, action: PayloadAction<{ fe_id: string; isHidden: boolean }>) => {
+    //     const { componentList = [] } = draft
+    //     const { fe_id, isHidden } = action.payload
+
+    //     // 重新计算 selectedId
+    //     let newSelectedId = ''
+    //     if (isHidden) {
+    //       // 要隐藏
+    //       newSelectedId = getNextSelectedId(componentList, fe_id)
+    //     } else {
+    //       // 要显示
+    //       newSelectedId = fe_id
+    //     }
+    //     draft.selectedId = newSelectedId
+
+    //     const curComp = componentList.find(c => c.fe_id === fe_id)
+    //     if (curComp) {
+    //       curComp.isHidden = isHidden
+    //     }
+    //   }
+    // ),
   },
 })
 export const {
@@ -116,5 +173,6 @@ export const {
   addComponent,
   changeComponentProps,
   removeSelectedComponent,
+  changeComponentHidden,
 } = componentsSlice.actions
 export default componentsSlice.reducer

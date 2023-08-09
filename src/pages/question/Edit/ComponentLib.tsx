@@ -22,6 +22,7 @@ const Libs: FC = () => {
           fe_id: nanoid(),
           type,
           title,
+          isHidden: false,
           props: defaultProps,
         })
       )

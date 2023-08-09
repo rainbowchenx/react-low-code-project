@@ -30,6 +30,7 @@ module.exports = [
               fe_id: Random.id(),
               type: 'QuestionTitle',
               title: '标题',
+              isHidden: false,
               props: {
                 text: '个人信息调研',
                 level: 1,
@@ -41,6 +42,7 @@ module.exports = [
               fe_id: Random.id(),
               type: 'QuestionInput', //组件类型是不能重复且唯一的
               title: '输入框',
+              isHidden: false,
               props: { title: '你的名字', placeholder: '请输入你的姓名' },
             },
             // 输入
@@ -48,6 +50,7 @@ module.exports = [
               fe_id: Random.id(),
               type: 'QuestionInput',
               title: '输入框',
+              isHidden: false,
               props: { title: '你的电话', placeholder: '请输入你的电话' },
             },
           ],
