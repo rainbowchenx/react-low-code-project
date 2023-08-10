@@ -3,14 +3,19 @@
  */
 import React, { FC } from 'react'
 import { Button, Space, Tooltip } from 'antd'
-import { DeleteOutlined, EyeInvisibleOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EyeInvisibleOutlined, LockOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
-import { removeSelectedComponent, changeComponentHidden } from '../../../store/componentsReducer'
+import {
+  removeSelectedComponent,
+  changeComponentHidden,
+  toggleComponentLocked,
+} from '../../../store/componentsReducer'
 import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
 
 const EditToolbar: FC = () => {
   const dispatch = useDispatch()
-  const { selectedId } = useGetComponentInfo()
+  const { selectedId, selectedComponent } = useGetComponentInfo()
+  const { isLocked } = selectedComponent || {}
   // 删除问卷的函数
   function handleDelete() {
     dispatch(removeSelectedComponent())
@@ -18,6 +23,10 @@ const EditToolbar: FC = () => {
   // 隐藏问卷的函数
   function handleHidden() {
     dispatch(changeComponentHidden({ fe_id: selectedId, isHidden: true }))
+  }
+  // 锁定问卷的函数
+  function handleLock() {
+    dispatch(toggleComponentLocked({ fe_id: selectedId }))
   }
 
   return (
@@ -27,6 +36,14 @@ const EditToolbar: FC = () => {
       </Tooltip>
       <Tooltip title="隐藏">
         <Button shape="circle" icon={<EyeInvisibleOutlined />} onClick={handleHidden} />
+      </Tooltip>
+      <Tooltip title="修改">
+        <Button
+          shape="circle"
+          icon={<LockOutlined />}
+          onClick={handleLock}
+          type={isLocked ? 'primary' : 'default'}
+        />
       </Tooltip>
     </Space>
   )

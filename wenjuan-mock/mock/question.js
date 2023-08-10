@@ -31,6 +31,7 @@ module.exports = [
               type: 'QuestionTitle',
               title: '标题',
               isHidden: false,
+              isLocked: false,
               props: {
                 text: '个人信息调研',
                 level: 1,
@@ -43,6 +44,7 @@ module.exports = [
               type: 'QuestionInput', //组件类型是不能重复且唯一的
               title: '输入框',
               isHidden: false,
+              isLocked: false,
               props: { title: '你的名字', placeholder: '请输入你的姓名' },
             },
             // 输入
@@ -51,6 +53,7 @@ module.exports = [
               type: 'QuestionInput',
               title: '输入框',
               isHidden: false,
+              isLocked: false,
               props: { title: '你的电话', placeholder: '请输入你的电话' },
             },
           ],

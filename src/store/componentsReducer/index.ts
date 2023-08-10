@@ -1,6 +1,6 @@
 // 存储组件列表数据
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import produce from 'immer'
+// import produce from 'immer'
 // 引入组件的属性类型
 import { ComponentPropsType } from '../../componnets/QuestionComponents'
 import { getNextSelectedId } from './utils'
@@ -10,6 +10,7 @@ export type ComponentInfoType = {
   type: string //问卷的类型
   title: string //问卷的标题
   isHidden?: boolean //是否隐藏
+  isLocked?: boolean //是否锁定
   props: ComponentPropsType //问卷的属性，单独定义
 }
 // 各个组件组成的组件列表的类型
@@ -143,28 +144,29 @@ export const componentsSlice = createSlice({
         ],
       }
     },
-    // changeComponentHidden: produce(
-    //   (draft: ComponentsStateType, action: PayloadAction<{ fe_id: string; isHidden: boolean }>) => {
-    //     const { componentList = [] } = draft
-    //     const { fe_id, isHidden } = action.payload
-
-    //     // 重新计算 selectedId
-    //     let newSelectedId = ''
-    //     if (isHidden) {
-    //       // 要隐藏
-    //       newSelectedId = getNextSelectedId(componentList, fe_id)
-    //     } else {
-    //       // 要显示
-    //       newSelectedId = fe_id
-    //     }
-    //     draft.selectedId = newSelectedId
-
-    //     const curComp = componentList.find(c => c.fe_id === fe_id)
-    //     if (curComp) {
-    //       curComp.isHidden = isHidden
-    //     }
-    //   }
-    // ),
+    // 锁定和解除锁定组件
+    toggleComponentLocked: (
+      state: ComponentsStateType,
+      action: PayloadAction<{ fe_id: string }>
+    ) => {
+      const { fe_id } = action.payload
+      const { componentList } = state
+      const index = componentList.findIndex(item => item.fe_id === fe_id)
+      if (index < 0) {
+        return state
+      }
+      return {
+        ...state,
+        componentList: [
+          ...componentList.slice(0, index),
+          {
+            ...componentList[index],
+            isLocked: !componentList[index].isLocked,
+          },
+          ...componentList.slice(index + 1),
+        ],
+      }
+    },
   },
 })
 export const {
@@ -174,5 +176,6 @@ export const {
   changeComponentProps,
   removeSelectedComponent,
   changeComponentHidden,
+  toggleComponentLocked,
 } = componentsSlice.actions
 export default componentsSlice.reducer
