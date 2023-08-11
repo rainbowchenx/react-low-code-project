@@ -1,9 +1,11 @@
 // 存储组件列表数据
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import cloneDeep from 'lodash.clonedeep'
+import { nanoid } from '@reduxjs/toolkit'
 // import produce from 'immer'
 // 引入组件的属性类型
 import { ComponentPropsType } from '../../componnets/QuestionComponents'
-import { getNextSelectedId } from './utils'
+import { getNextSelectedId, insertNewComponent } from './utils'
 // 定义组件信息的类型,类型参照后端返回的数据类型,单个组件的信息
 export type ComponentInfoType = {
   fe_id: string //id标识
@@ -17,11 +19,14 @@ export type ComponentInfoType = {
 export type ComponentsStateType = {
   selectedId: string //当前选中的组件的id
   componentList: Array<ComponentInfoType>
+  copiedComponent: ComponentInfoType | null // 复制的组件
 }
 // 初始化组件列表的数据
 const INIT_STATE: ComponentsStateType = {
   selectedId: '',
   componentList: [],
+  copiedComponent: null,
+
   // 其他的扩展
 }
 export const componentsSlice = createSlice({
@@ -44,31 +49,7 @@ export const componentsSlice = createSlice({
      */
     addComponent: (state: ComponentsStateType, action: PayloadAction<ComponentInfoType>) => {
       const newComponent = action.payload
-      const { selectedId, componentList } = state
-      const index = componentList.findIndex(item => item.fe_id === selectedId)
-      if (index < 0) {
-        // 未选中任何组件
-        state = {
-          ...state,
-          componentList: [...componentList, newComponent],
-        }
-      } else {
-        // 选中某个组件
-        state = {
-          ...state,
-          componentList: [
-            ...componentList.slice(0, index + 1),
-            newComponent,
-            ...componentList.slice(index + 1),
-          ],
-        }
-      }
-      // 新添加的组件为选中状态
-      state = {
-        ...state,
-        selectedId: newComponent.fe_id,
-      }
-      return state
+      insertNewComponent(state, newComponent)
     },
     // 修改组件属性
     changeComponentProps: (
@@ -167,6 +148,25 @@ export const componentsSlice = createSlice({
         ],
       }
     },
+    // 复制当前选中的组件
+    copySelectedComponent: (state: ComponentsStateType) => {
+      const { selectedId, componentList } = state
+      const index = componentList.findIndex(item => item.fe_id === selectedId)
+      if (index < 0) {
+        return state
+      }
+      return {
+        ...state,
+        copiedComponent: cloneDeep(componentList[index]),
+      }
+    },
+    // 粘贴复制的组件》
+    pasteCopiedComponent: (state: ComponentsStateType) => {
+      const { copiedComponent } = state
+      if (copiedComponent === null) return state
+      copiedComponent.fe_id = nanoid()
+      insertNewComponent(state, copiedComponent)
+    },
   },
 })
 export const {
@@ -177,5 +177,7 @@ export const {
   removeSelectedComponent,
   changeComponentHidden,
   toggleComponentLocked,
+  copySelectedComponent,
+  pasteCopiedComponent,
 } = componentsSlice.actions
 export default componentsSlice.reducer

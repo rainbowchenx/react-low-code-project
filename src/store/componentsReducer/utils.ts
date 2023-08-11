@@ -1,4 +1,4 @@
-import { ComponentInfoType } from './index'
+import { ComponentInfoType, ComponentsStateType } from './index'
 
 export function getNextSelectedId(componentList: ComponentInfoType[], selectedId: string) {
   // 选中的id前提是没有隐藏的
@@ -21,4 +21,35 @@ export function getNextSelectedId(componentList: ComponentInfoType[], selectedId
   //   }
 
   return visibleComponentList[index + 1]?.fe_id || visibleComponentList[index - 1]?.fe_id
+}
+/**
+ * @description 插入新组件
+ * @param draft
+ * @param newComponent
+ */
+export function insertNewComponent(state: ComponentsStateType, newComponent: ComponentInfoType) {
+  const { selectedId, componentList } = state
+  const index = componentList.findIndex(item => item.fe_id === selectedId)
+  if (index < 0) {
+    // 未选中任何组件
+    state = {
+      ...state,
+      componentList: [...componentList, newComponent],
+    }
+  } else {
+    // 选中某个组件
+    state = {
+      ...state,
+      componentList: [
+        ...componentList.slice(0, index + 1),
+        newComponent,
+        ...componentList.slice(index + 1),
+      ],
+    }
+  }
+  // 新添加的组件为选中状态 k
+  return {
+    ...state,
+    selectedId: newComponent.fe_id,
+  }
 }
