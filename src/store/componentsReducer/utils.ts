@@ -24,7 +24,7 @@ export function getNextSelectedId(componentList: ComponentInfoType[], selectedId
 }
 /**
  * @description 插入新组件
- * @param draft
+ * @param state
  * @param newComponent
  */
 export function insertNewComponent(state: ComponentsStateType, newComponent: ComponentInfoType) {
@@ -32,24 +32,21 @@ export function insertNewComponent(state: ComponentsStateType, newComponent: Com
   const index = componentList.findIndex(item => item.fe_id === selectedId)
   if (index < 0) {
     // 未选中任何组件
-    state = {
+    return {
       ...state,
       componentList: [...componentList, newComponent],
     }
   } else {
     // 选中某个组件
-    state = {
+    return {
       ...state,
       componentList: [
-        ...componentList.slice(0, index + 1),
+        ...componentList.slice(0, index),
         newComponent,
         ...componentList.slice(index + 1),
       ],
+      selectedId: newComponent.fe_id,
     }
   }
   // 新添加的组件为选中状态 k
-  return {
-    ...state,
-    selectedId: newComponent.fe_id,
-  }
 }

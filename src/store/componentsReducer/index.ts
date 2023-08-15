@@ -56,9 +56,9 @@ export const componentsSlice = createSlice({
       state: ComponentsStateType,
       action: PayloadAction<{ fe_id: string; newProps: ComponentPropsType }>
     ) => {
-      console.log('changeComponentProps', action.payload)
       const { fe_id, newProps } = action.payload
       const { componentList } = state
+      console.log('changeComponentProps', componentList)
       const index = componentList.findIndex(item => item.fe_id === fe_id)
       if (index < 0) {
         return state
@@ -167,6 +167,34 @@ export const componentsSlice = createSlice({
       copiedComponent.fe_id = nanoid()
       insertNewComponent(state, copiedComponent)
     },
+    // 选中上一个组件
+    selectPrevComponent: (state: ComponentsStateType) => {
+      const { componentList, selectedId } = state
+      const index = componentList.findIndex(item => item.fe_id === selectedId)
+      if (index < 0) {
+        return state
+      }
+      if (index <= 0) return state
+      const newSelectedId = componentList[index - 1].fe_id
+      return {
+        ...state,
+        selectedId: newSelectedId,
+      }
+    },
+    // 选中下一个组件
+    selectNextComponent: (state: ComponentsStateType) => {
+      const { componentList, selectedId } = state
+      const index = componentList.findIndex(item => item.fe_id === selectedId)
+      if (index < 0) {
+        return state
+      }
+      if (index >= componentList.length) return state
+      const newSelectedId = componentList[index + 1].fe_id
+      return {
+        ...state,
+        selectedId: newSelectedId,
+      }
+    },
   },
 })
 export const {
@@ -179,5 +207,7 @@ export const {
   toggleComponentLocked,
   copySelectedComponent,
   pasteCopiedComponent,
+  selectPrevComponent,
+  selectNextComponent,
 } = componentsSlice.actions
 export default componentsSlice.reducer
