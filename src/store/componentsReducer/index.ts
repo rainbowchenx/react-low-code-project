@@ -188,7 +188,7 @@ export const componentsSlice = createSlice({
       if (index < 0) {
         return state
       }
-      if (index >= componentList.length) return state
+      if (index + 1 === componentList.length) return state
       const newSelectedId = componentList[index + 1].fe_id
       return {
         ...state,

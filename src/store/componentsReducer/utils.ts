@@ -26,27 +26,43 @@ export function getNextSelectedId(componentList: ComponentInfoType[], selectedId
  * @description 插入新组件
  * @param state
  * @param newComponent
- */
-export function insertNewComponent(state: ComponentsStateType, newComponent: ComponentInfoType) {
-  const { selectedId, componentList } = state
-  const index = componentList.findIndex(item => item.fe_id === selectedId)
+//  */
+// export function insertNewComponent(state: ComponentsStateType, newComponent: ComponentInfoType) {
+//   const { selectedId, componentList } = state
+//   const index = componentList.findIndex(item => item.fe_id === selectedId)
+//   if (index < 0) {
+//     // 未选中任何组件
+//     return {
+//       ...state,
+//       componentList: [...componentList, newComponent],
+//       selectedId: newComponent.fe_id,
+//     }
+//   } else {
+//     // 选中某个组件
+//     return {
+//       ...state,
+//       componentList: [
+//         ...componentList.slice(0, index),
+//         newComponent,
+//         ...componentList.slice(index + 1),
+//       ],
+//       selectedId: newComponent.fe_id,
+//     }
+//   }
+//   // 新添加的组件为选中状态 k
+// }
+export function insertNewComponent(draft: ComponentsStateType, newComponent: ComponentInfoType) {
+  console.log('draft', draft.componentList)
+  const { selectedId, componentList } = draft
+  const index = componentList.findIndex(c => c.fe_id === selectedId)
+
   if (index < 0) {
     // 未选中任何组件
-    return {
-      ...state,
-      componentList: [...componentList, newComponent],
-    }
+    draft.componentList.push(newComponent)
   } else {
-    // 选中某个组件
-    return {
-      ...state,
-      componentList: [
-        ...componentList.slice(0, index),
-        newComponent,
-        ...componentList.slice(index + 1),
-      ],
-      selectedId: newComponent.fe_id,
-    }
+    // 选中了组件，插入到 index 后面
+    draft.componentList.splice(index + 1, 0, newComponent)
   }
-  // 新添加的组件为选中状态 k
+
+  draft.selectedId = newComponent.fe_id
 }
