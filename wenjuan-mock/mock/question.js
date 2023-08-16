@@ -61,11 +61,11 @@ module.exports = [
             // 输入
             {
               fe_id: Random.id(),
-              type: 'QuestionInput',
-              title: '输入框',
+              type: 'QuestionTextarea',
+              title: '多行输入框',
               isHidden: false,
               isLocked: false,
-              props: { title: '你的电话', placeholder: '请输入你的电话' },
+              props: { title: '你的爱好', placeholder: '请输入你的爱好' },
             },
             // paragraph
             {

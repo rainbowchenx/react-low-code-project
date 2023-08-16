@@ -3,18 +3,19 @@
  */
 import React, { FC } from 'react'
 import { Typography, Input } from 'antd'
-import { QuestionInputDefaultProps, QuestionInputPropsType } from './interface'
+import { QuestionTextareaDefaultProps, QuestionTextareaPropsType } from './interface'
 
 const { Paragraph } = Typography
-const QuestionInput: FC<QuestionInputPropsType> = (props: QuestionInputPropsType) => {
-  const { title, placeholder } = { ...QuestionInputDefaultProps, ...props }
+const { TextArea } = Input
+const QuestionTextarea: FC<QuestionTextareaPropsType> = (props: QuestionTextareaPropsType) => {
+  const { title, placeholder } = { ...QuestionTextareaDefaultProps, ...props }
   return (
     <div>
       <Paragraph strong>{title}</Paragraph>
       <div>
-        <Input placeholder={placeholder}></Input>
+        <TextArea placeholder={placeholder}></TextArea>
       </div>
     </div>
   )
 }
-export default QuestionInput
+export default QuestionTextarea

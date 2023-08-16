@@ -1,11 +1,11 @@
 //定义各种类型 ts的接口
-export type QuestionInputPropsType = {
+export type QuestionTextareaPropsType = {
   title?: string
   placeholder?: string
-  onChange?: (newProps: QuestionInputPropsType) => void
+  onChange?: (newProps: QuestionTextareaPropsType) => void
   disabled?: boolean
 }
-export const QuestionInputDefaultProps: QuestionInputPropsType = {
+export const QuestionTextareaDefaultProps: QuestionTextareaPropsType = {
   title: '输入框标题',
   placeholder: '请输入...',
 }
