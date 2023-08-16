@@ -1,5 +1,5 @@
 /**
- * @description 单行输入框组件
+ * @description 多行输入框组件
  */
 import React, { FC } from 'react'
 import { Typography, Input } from 'antd'

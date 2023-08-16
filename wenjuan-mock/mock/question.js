@@ -25,6 +25,17 @@ module.exports = [
           // 初始化组件列表的mock数据
           // 所有组件的列表
           componentList: [
+            {
+              fe_id: Random.id(),
+              type: 'QuestionInfo',
+              title: '问卷信息',
+              isHidden: false,
+              isLocked: false,
+              props: {
+                title: '问卷标题',
+                desc: '问卷描述',
+              },
+            },
             // 标题
             {
               fe_id: Random.id(),
@@ -55,6 +66,18 @@ module.exports = [
               isHidden: false,
               isLocked: false,
               props: { title: '你的电话', placeholder: '请输入你的电话' },
+            },
+            // paragraph
+            {
+              fe_id: Random.id(),
+              type: 'QuestionParagraph',
+              title: '段落',
+              isHidden: false,
+              isLocked: false,
+              props: {
+                text: '这是一个段落',
+                isCenter: false,
+              },
             },
           ],
         },
