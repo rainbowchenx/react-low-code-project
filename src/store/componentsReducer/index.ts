@@ -195,6 +195,29 @@ export const componentsSlice = createSlice({
         selectedId: newSelectedId,
       }
     },
+    // 修改标题的
+    changeComponentTitle: (
+      state: ComponentsStateType,
+      action: PayloadAction<{ fe_id: string; title: string }>
+    ) => {
+      const { fe_id, title } = action.payload
+      const { componentList } = state
+      const index = componentList.findIndex(item => item.fe_id === fe_id)
+      if (index < 0) {
+        return state
+      }
+      return {
+        ...state,
+        componentList: [
+          ...componentList.slice(0, index),
+          {
+            ...componentList[index],
+            title,
+          },
+          ...componentList.slice(index + 1),
+        ],
+      }
+    },
   },
 })
 export const {
@@ -209,5 +232,6 @@ export const {
   pasteCopiedComponent,
   selectPrevComponent,
   selectNextComponent,
+  changeComponentTitle,
 } = componentsSlice.actions
 export default componentsSlice.reducer
