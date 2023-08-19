@@ -28,7 +28,6 @@ function genComponent(componentInfo: ComponentInfoType) {
   const { type, props } = componentInfo
   const componentConf = getComponentConfByType(type)
   if (!componentConf == null) return null
-  // console.log(componentConf)
   const { Component } = componentConf as ComponentConfType
   return <Component {...props} />
 }

@@ -98,7 +98,7 @@ module.exports = [
             },
             {
               fe_id: Random.id(),
-              type: 'QuestionCheckout',
+              type: 'QuestionCheckbox',
               title: '多选',
               isHidden: false,
               isLocked: false,
