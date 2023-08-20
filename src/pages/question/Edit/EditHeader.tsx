@@ -2,15 +2,19 @@
  * @description 编辑问卷页面的头部
  */
 import React, { FC, useState, ChangeEvent } from 'react'
-import { Button, Typography, Space, Input } from 'antd'
+import { Button, Typography, Space, Input, message } from 'antd'
 import { LeftOutlined } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
-import { EditOutlined } from '@ant-design/icons'
+import { useNavigate, useParams } from 'react-router-dom'
+import { EditOutlined, LoadingOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 import EditToolbar from './EditToolbar'
 import styles from './EditHeader.module.scss'
 import useGetPageInfo from '../../../hooks/useGetPageInfo'
+import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
 import { changePageTitle } from '../../../store/pageInfoReducer'
+import { useRequest } from 'ahooks'
+import { updateQuestionService } from '../../../services/question'
+import { useKeyPress } from 'ahooks'
 const { Title } = Typography
 
 // 显示和修改标题
@@ -41,6 +45,59 @@ const TitleElem: FC = () => {
     </Space>
   )
 }
+// 保存按钮的组件
+const SaveBtn: FC = () => {
+  // 保存所有componentlist和pageinfo的信息
+  const { id } = useParams()
+  const { componentList } = useGetComponentInfo()
+  const pageInfo = useGetPageInfo()
+  const { loading, run: save } = useRequest(
+    async () => {
+      if (!id) return
+      await updateQuestionService(id, { ...pageInfo, componentList })
+    },
+    {
+      manual: true,
+    }
+  )
+  // 快捷键
+  useKeyPress(['ctrl.s', 'meta.s'], (event: KeyboardEvent) => {
+    event.preventDefault()
+    if (!loading) save()
+  })
+
+  return (
+    <Button onClick={save} disabled={loading} icon={loading ? <LoadingOutlined /> : null}>
+      保存
+    </Button>
+  )
+}
+// 发布按钮的组件(修改ispublished属性)
+const PublishBtn: FC = () => {
+  const nav = useNavigate()
+  // 保存所有componentlist和pageinfo的信息
+  const { id } = useParams()
+  const { componentList } = useGetComponentInfo()
+  const pageInfo = useGetPageInfo()
+  const { loading, run: pub } = useRequest(
+    async () => {
+      if (!id) return
+      await updateQuestionService(id, { ...pageInfo, componentList, ispublished: true })
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success('发布成功')
+        nav('/question/stat/' + id)
+      },
+    }
+  )
+  return (
+    <Button type="primary" onClick={pub} disabled={loading}>
+      发布
+    </Button>
+  )
+}
 // 编辑器头部
 const EditHeader: FC = () => {
   const nav = useNavigate()
@@ -62,8 +119,8 @@ const EditHeader: FC = () => {
         </div>
         <div className={styles['right']}>
           <Space>
-            <Button>保存</Button>
-            <Button type="primary">发布</Button>
+            <SaveBtn />
+            <PublishBtn />
           </Space>
         </div>
       </div>
