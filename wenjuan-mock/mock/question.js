@@ -22,6 +22,9 @@ module.exports = [
         data: {
           id: Random.id(),
           title: Random.ctitle(10, 20),
+          desc: '问卷描述',
+          js: '',
+          css: '',
           // 初始化组件列表的mock数据
           // 所有组件的列表
           componentList: [

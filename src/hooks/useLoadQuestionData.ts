@@ -11,6 +11,7 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 // 导入action
 import { resetComponents } from '../store/componentsReducer'
+import { resetPageInfo } from '../store/pageInfoReducer'
 function useLoadQuestionData() {
   const dispatch = useDispatch()
   // 从url中获取问卷id
@@ -29,7 +30,7 @@ function useLoadQuestionData() {
   // 根据获取的data设置redux store
   useEffect(() => {
     if (!data) return
-    const { title = '', componentList = [] } = data
+    const { title = '', desc = '', js = '', css = '', componentList = [] } = data
     // 获取默认的selectedId,默认选中第一个组件
     let selectedId = ''
     if (componentList.length > 0) {
@@ -37,6 +38,8 @@ function useLoadQuestionData() {
     }
     // 将componentlist存入redux
     dispatch(resetComponents({ componentList, selectedId, copiedComponent: null }))
+    // 将页面信息pageInfo存储到redux中
+    dispatch(resetPageInfo({ title, desc, js, css }))
   }, [data])
 
   // 判断id变化，执行ajax加载问卷数据
