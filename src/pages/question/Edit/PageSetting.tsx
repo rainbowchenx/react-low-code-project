@@ -4,7 +4,7 @@
 import React, { FC, useEffect } from 'react'
 import styles from './PageSetting.module.scss'
 import useGetPageInfo from '../../../hooks/useGetPageInfo'
-import { Form, Input, Button, Select } from 'antd'
+import { Form, Input } from 'antd'
 import { resetPageInfo } from '../../../store/pageInfoReducer'
 import { useDispatch } from 'react-redux'
 const { TextArea } = Input
