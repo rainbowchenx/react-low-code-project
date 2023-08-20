@@ -14,7 +14,8 @@ import {
 function isActiveElementValid() {
   const activeElement = document.activeElement
   if (activeElement === document.body) return true
-  return false
+  // css查询器匹配
+  if (activeElement?.matches('div[role="button"]')) return true
 }
 function useBindCanvasKeyPress() {
   const dispatch = useDispatch()
