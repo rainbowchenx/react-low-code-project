@@ -12,9 +12,8 @@ import styles from './EditHeader.module.scss'
 import useGetPageInfo from '../../../hooks/useGetPageInfo'
 import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
 import { changePageTitle } from '../../../store/pageInfoReducer'
-import { useRequest } from 'ahooks'
+import { useRequest, useKeyPress, useDebounceEffect } from 'ahooks'
 import { updateQuestionService } from '../../../services/question'
-import { useKeyPress } from 'ahooks'
 const { Title } = Typography
 
 // 显示和修改标题
@@ -58,6 +57,9 @@ const SaveBtn: FC = () => {
     },
     {
       manual: true,
+      onSuccess() {
+        message.success('保存成功')
+      },
     }
   )
   // 快捷键
@@ -65,6 +67,15 @@ const SaveBtn: FC = () => {
     event.preventDefault()
     if (!loading) save()
   })
+  // 自动保存
+  useDebounceEffect(
+    () => {
+      if (!id) return
+      save()
+    },
+    [componentList, pageInfo],
+    { wait: 30000 }
+  )
 
   return (
     <Button onClick={save} disabled={loading} icon={loading ? <LoadingOutlined /> : null}>
