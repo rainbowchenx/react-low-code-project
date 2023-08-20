@@ -9,11 +9,18 @@ import classNames from 'classnames'
 // 导入获取组件列表的自定义hook
 import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
 // 导入组件信息类型
-import { ComponentInfoType, changeSelectedId } from '../../../store/componentsReducer'
+import {
+  ComponentInfoType,
+  changeSelectedId,
+  moveComponent,
+} from '../../../store/componentsReducer'
 import { getComponentConfByType } from '../../../componnets/QuestionComponents/index'
 // 导入组件配置类型
 import { ComponentConfType } from '../../../componnets/QuestionComponents'
 import useBindCanvasKeyPress from '../../../hooks/useBindCanvasKeyPress'
+
+import SortableContainer from '../../../componnets/DragSortable/SortableContainer'
+import SortableItem from '../../../componnets/DragSortable/SortableItem'
 
 // 临时静态展示一下title input的效果
 // import QuestionInput from '../../../componnets/QuestionComponents/QuestionInput/Component'
@@ -49,42 +56,52 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
       </div>
     )
   }
+  const componentListWithId = componentList.map(c => ({ id: c.fe_id, ...c }))
+  // 拖拽排序结束
+  function handleDragEnd(oldIndex: number, newIndex: number) {
+    if (oldIndex === newIndex) return
+    dispatch(moveComponent({ oldIndex, newIndex }))
+  }
   return (
-    <div className={styles.canvas}>
-      {/* 使用发请求获取的数据替换掉静态数据 */}
-      {/* <div className={styles['component-wrapper']}>
-        <div className={styles.component}> */}
-      {/* 问卷标题 */}
-      {/* <QuestionTitle />
+    <SortableContainer items={componentListWithId} onDragEnd={handleDragEnd}>
+      <div className={styles.canvas}>
+        {/* 使用发请求获取的数据替换掉静态数据 */}
+        {/* <div className={styles['component-wrapper']}>
+          <div className={styles.component}> */}
+        {/* 问卷标题 */}
+        {/* <QuestionTitle />
+          </div>
         </div>
+        <div className={styles['component-wrapper']}>
+          <div className={styles.component}> */}
+        {/* 问卷输入框 */}
+        {/* <QuestionInput />
+          </div>
+        </div> */}
+        {/* 遍历组件列表,动态渲染页面 */}
+        {componentList
+          .filter(item => !item.isHidden)
+          .map(c => {
+            const { fe_id, isLocked } = c
+            // 拼接className
+            const wrapperDefaultClassName = styles['component-wrapper']
+            const selectedClassName = styles.selected
+            const lockedClassName = styles.locked
+            const wrapperClassName = classNames({
+              [wrapperDefaultClassName]: true,
+              [selectedClassName]: fe_id === selectedId,
+              [lockedClassName]: isLocked,
+            })
+            return (
+              <SortableItem key={fe_id} id={fe_id}>
+                <div key={fe_id} className={wrapperClassName} onClick={e => handleClick(e, fe_id)}>
+                  <div className={styles.component}>{genComponent(c)}</div>
+                </div>
+              </SortableItem>
+            )
+          })}
       </div>
-      <div className={styles['component-wrapper']}>
-        <div className={styles.component}> */}
-      {/* 问卷输入框 */}
-      {/* <QuestionInput />
-        </div>
-      </div> */}
-      {/* 遍历组件列表,动态渲染页面 */}
-      {componentList
-        .filter(item => !item.isHidden)
-        .map(c => {
-          const { fe_id, isLocked } = c
-          // 拼接className
-          const wrapperDefaultClassName = styles['component-wrapper']
-          const selectedClassName = styles.selected
-          const lockedClassName = styles.locked
-          const wrapperClassName = classNames({
-            [wrapperDefaultClassName]: true,
-            [selectedClassName]: fe_id === selectedId,
-            [lockedClassName]: isLocked,
-          })
-          return (
-            <div key={fe_id} className={wrapperClassName} onClick={e => handleClick(e, fe_id)}>
-              <div className={styles.component}>{genComponent(c)}</div>
-            </div>
-          )
-        })}
-    </div>
+    </SortableContainer>
   )
 }
 export default EditCanvas

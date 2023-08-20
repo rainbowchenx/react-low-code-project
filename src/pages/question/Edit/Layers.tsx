@@ -6,11 +6,14 @@ import {
   changeComponentTitle,
   toggleComponentLocked,
   changeComponentHidden,
+  moveComponent,
 } from '../../../store/componentsReducer'
 import styles from './Layers.module.scss'
 import { message, Input, Button, Space } from 'antd'
 import { EyeOutlined, LockOutlined } from '@ant-design/icons'
 import classNames from 'classnames'
+import SortableContainer from '../../../componnets/DragSortable/SortableContainer'
+import SortableItem from '../../../componnets/DragSortable/SortableItem'
 const Layers: FC = () => {
   const dispatch = useDispatch()
   const { componentList, selectedId } = useGetComponentInfo()
@@ -52,8 +55,14 @@ const Layers: FC = () => {
     dispatch(toggleComponentLocked({ fe_id }))
   }
 
+  const componentListWithId = componentList.map(c => ({ id: c.fe_id, ...c }))
+  // 拖拽排序结束
+  function handleDragEnd(oldIndex: number, newIndex: number) {
+    if (oldIndex === newIndex) return
+    dispatch(moveComponent({ oldIndex, newIndex }))
+  }
   return (
-    <>
+    <SortableContainer items={componentListWithId} onDragEnd={handleDragEnd}>
       {componentList.map(c => {
         const { fe_id, title, isHidden, isLocked } = c
         // 拼接title classname
@@ -64,42 +73,44 @@ const Layers: FC = () => {
           [selectedClassName]: fe_id === selectedId,
         })
         return (
-          <div key={fe_id} className={styles.wrapper}>
-            <div className={titleClassName} onClick={() => handleTitleClick(fe_id)}>
-              {fe_id === changeingTitleId && (
-                <Input
-                  value={title}
-                  autoFocus={true}
-                  onChange={changeTitle}
-                  onBlur={() => setChangingTitleId('')}
-                  onPressEnter={() => setChangingTitleId('')}
-                />
-              )}
-              {fe_id !== changeingTitleId && title}
+          <SortableItem key={fe_id} id={fe_id}>
+            <div className={styles.wrapper}>
+              <div className={titleClassName} onClick={() => handleTitleClick(fe_id)}>
+                {fe_id === changeingTitleId && (
+                  <Input
+                    value={title}
+                    autoFocus={true}
+                    onChange={changeTitle}
+                    onBlur={() => setChangingTitleId('')}
+                    onPressEnter={() => setChangingTitleId('')}
+                  />
+                )}
+                {fe_id !== changeingTitleId && title}
+              </div>
+              <div className={styles.handler}>
+                <Space>
+                  <Button
+                    size="small"
+                    shape="circle"
+                    className={isHidden ? styles.btn : ''}
+                    icon={<EyeOutlined />}
+                    type={isHidden ? 'primary' : 'text'}
+                    onClick={() => changeHidden(fe_id, !isHidden)}
+                  ></Button>
+                  <Button
+                    size="small"
+                    shape="circle"
+                    icon={<LockOutlined />}
+                    type={isLocked ? 'primary' : 'text'}
+                    onClick={() => changeLocked(fe_id)}
+                  ></Button>
+                </Space>
+              </div>
             </div>
-            <div className={styles.handler}>
-              <Space>
-                <Button
-                  size="small"
-                  shape="circle"
-                  className={isHidden ? styles.btn : ''}
-                  icon={<EyeOutlined />}
-                  type={isHidden ? 'primary' : 'text'}
-                  onClick={() => changeHidden(fe_id, !isHidden)}
-                ></Button>
-                <Button
-                  size="small"
-                  shape="circle"
-                  icon={<LockOutlined />}
-                  type={isLocked ? 'primary' : 'text'}
-                  onClick={() => changeLocked(fe_id)}
-                ></Button>
-              </Space>
-            </div>
-          </div>
+          </SortableItem>
         )
       })}
-    </>
+    </SortableContainer>
   )
 }
 

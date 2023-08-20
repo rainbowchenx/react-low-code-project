@@ -6,6 +6,7 @@ import { nanoid } from '@reduxjs/toolkit'
 // 引入组件的属性类型
 import { ComponentPropsType } from '../../componnets/QuestionComponents'
 import { getNextSelectedId, insertNewComponent } from './utils'
+import { arrayMove } from '@dnd-kit/sortable'
 // 定义组件信息的类型,类型参照后端返回的数据类型,单个组件的信息
 export type ComponentInfoType = {
   fe_id: string //id标识
@@ -218,6 +219,19 @@ export const componentsSlice = createSlice({
         ],
       }
     },
+    // 移动组件位置，更新组件的位置,使用dnd-kit的arrayMove方法
+    moveComponent: (
+      state: ComponentsStateType,
+      action: PayloadAction<{ oldIndex: number; newIndex: number }>
+    ) => {
+      const { oldIndex, newIndex } = action.payload
+      const { componentList: curComponentList } = state
+      const newComponentList = arrayMove(curComponentList, oldIndex, newIndex)
+      return {
+        ...state,
+        componentList: newComponentList,
+      }
+    },
   },
 })
 export const {
@@ -233,5 +247,6 @@ export const {
   selectPrevComponent,
   selectNextComponent,
   changeComponentTitle,
+  moveComponent,
 } = componentsSlice.actions
 export default componentsSlice.reducer
