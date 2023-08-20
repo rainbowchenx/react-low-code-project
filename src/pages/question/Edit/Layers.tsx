@@ -1,9 +1,15 @@
 import React, { FC, useState, ChangeEvent } from 'react'
 import { useDispatch } from 'react-redux'
 import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
-import { changeSelectedId, changeComponentTitle } from '../../../store/componentsReducer'
+import {
+  changeSelectedId,
+  changeComponentTitle,
+  toggleComponentLocked,
+  changeComponentHidden,
+} from '../../../store/componentsReducer'
 import styles from './Layers.module.scss'
-import { message, Input } from 'antd'
+import { message, Input, Button, Space } from 'antd'
+import { EyeOutlined, LockOutlined } from '@ant-design/icons'
 import classNames from 'classnames'
 const Layers: FC = () => {
   const dispatch = useDispatch()
@@ -37,6 +43,14 @@ const Layers: FC = () => {
     if (!selectedId) return
     dispatch(changeComponentTitle({ fe_id: selectedId, title: newTitle }))
   }
+  // 改变隐藏
+  function changeHidden(fe_id: string, isHidden: boolean) {
+    dispatch(changeComponentHidden({ fe_id, isHidden }))
+  }
+  // 改变锁定
+  function changeLocked(fe_id: string) {
+    dispatch(toggleComponentLocked({ fe_id }))
+  }
 
   return (
     <>
@@ -63,7 +77,25 @@ const Layers: FC = () => {
               )}
               {fe_id !== changeingTitleId && title}
             </div>
-            <div className={styles.handler}>按钮</div>
+            <div className={styles.handler}>
+              <Space>
+                <Button
+                  size="small"
+                  shape="circle"
+                  className={isHidden ? styles.btn : ''}
+                  icon={<EyeOutlined />}
+                  type={isHidden ? 'primary' : 'text'}
+                  onClick={() => changeHidden(fe_id, !isHidden)}
+                ></Button>
+                <Button
+                  size="small"
+                  shape="circle"
+                  icon={<LockOutlined />}
+                  type={isLocked ? 'primary' : 'text'}
+                  onClick={() => changeLocked(fe_id)}
+                ></Button>
+              </Space>
+            </div>
           </div>
         )
       })}
