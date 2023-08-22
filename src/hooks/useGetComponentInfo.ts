@@ -10,7 +10,7 @@ import { ComponentsStateType } from '../store/componentsReducer'
 
 function useGetComponentInfo() {
   // 获取store中的组件相关数据,类型断言一下
-  const components = useSelector<StateType>(state => state.components) as ComponentsStateType
+  const components = useSelector<StateType>(state => state.component.present) as ComponentsStateType
   const { componentList = [], selectedId, copiedComponent } = components
   // 根据selectedId获取当前选中的组件
   const selectedComponent = componentList.find(item => item.fe_id === selectedId)
